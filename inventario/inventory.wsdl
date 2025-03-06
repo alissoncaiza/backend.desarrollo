@@ -1,0 +1,62 @@
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/"
+             xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+             xmlns:tns="http://localhost:4000/inventario"
+             xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+             targetNamespace="http://localhost:4000/inventario">
+
+  <message name="GetProductRequest">
+    <part name="id" type="xsd:int" />
+  </message>
+
+  <message name="GetProductResponse">
+    <part name="product" type="xsd:string" />
+  </message>
+
+  <message name="UpdateStockRequest">
+    <part name="id" type="xsd:int" />
+    <part name="cantidad" type="xsd:int" />
+  </message>
+
+  <message name="UpdateStockResponse">
+    <part name="status" type="xsd:string" />
+  </message>
+
+  <portType name="InventoryPortType">
+    <operation name="GetProduct">
+      <input message="tns:GetProductRequest" />
+      <output message="tns:GetProductResponse" />
+    </operation>
+    <operation name="UpdateStock">
+      <input message="tns:UpdateStockRequest" />
+      <output message="tns:UpdateStockResponse" />
+    </operation>
+  </portType>
+
+  <binding name="InventoryBinding" type="tns:InventoryPortType">
+    <soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http" />
+    <operation name="GetProduct">
+      <soap:operation soapAction="http://localhost:4000/inventario/GetProduct" />
+      <input>
+        <soap:body use="literal" />
+      </input>
+      <output>
+        <soap:body use="literal" />
+      </output>
+    </operation>
+    <operation name="UpdateStock">
+      <soap:operation soapAction="http://localhost:4000/inventario/UpdateStock" />
+      <input>
+        <soap:body use="literal" />
+      </input>
+      <output>
+        <soap:body use="literal" />
+      </output>
+    </operation>
+  </binding>
+
+  <service name="InventoryService">
+    <port name="InventoryPort" binding="tns:InventoryBinding">
+      <soap:address location="http://localhost:4000/wsdl" />
+    </port>
+  </service>
+</definitions>
