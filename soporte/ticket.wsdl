@@ -1,0 +1,201 @@
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/"
+             xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+             xmlns:tns="http://localhost:5000/tickets"
+             xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+             targetNamespace="http://localhost:5000/tickets">
+  <types>
+    <xsd:schema targetNamespace="http://localhost:5000/tickets">
+      <!-- Request and Response for CreateTicket -->
+      <xsd:element name="CreateTicketRequest">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="token" type="xsd:string"/>
+            <xsd:element name="asunto" type="xsd:string"/>
+            <xsd:element name="descripcion" type="xsd:string"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="CreateTicketResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="ticket" type="tns:Ticket"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+
+      <!-- Request and Response for GetTicketById -->     
+      <xsd:element name="GetTicketByIdRequest">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="token" type="xsd:string"/>
+            <xsd:element name="id" type="xsd:int"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="GetTicketByIdResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="ticket" type="tns:Ticket"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+
+      <!-- Request and Response for UpdateTicketStatus -->
+      <xsd:element name="UpdateTicketStatusRequest">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="token" type="xsd:string"/>
+            <xsd:element name="id" type="xsd:int"/>
+            <xsd:element name="estado" type="xsd:string"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+        <xsd:element name="UpdateTicketStatusResponse">
+        <xsd:complexType>
+            <xsd:sequence>
+            <xsd:element name="ticket">
+                <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element name="id" type="xsd:int"/>
+                    <xsd:element name="usuario_id" type="xsd:int"/>
+                    <xsd:element name="asunto" type="xsd:string"/>
+                    <xsd:element name="descripcion" type="xsd:string"/>
+                    <xsd:element name="estado" type="xsd:string"/>
+                    <xsd:element name="fecha_creacion" type="xsd:string"/>
+                    <xsd:element name="fecha_actualizacion" type="xsd:string"/>
+                </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+            </xsd:sequence>
+        </xsd:complexType>
+        </xsd:element>
+
+
+      <!-- Request and Response for GetAllTickets -->
+      <xsd:element name="GetAllTicketsRequest">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="token" type="xsd:string"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="GetAllTicketsResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="tickets" type="tns:Ticket" maxOccurs="unbounded"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+
+      <!-- Ticket Complex Type -->
+      <xsd:complexType name="Ticket">
+        <xsd:sequence>
+          <xsd:element name="id" type="xsd:int"/>
+          <xsd:element name="usuarioId" type="xsd:int"/>
+          <xsd:element name="asunto" type="xsd:string"/>
+          <xsd:element name="descripcion" type="xsd:string"/>
+          <xsd:element name="estado" type="xsd:string"/>
+          <xsd:element name="fecha_creacion" type="xsd:string"/>
+          <xsd:element name="fecha_actualizacion" type="xsd:string"/>
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:schema>
+  </types>
+
+  <!-- Messages -->
+  <message name="CreateTicketRequest">
+    <part name="parameters" element="tns:CreateTicketRequest"/>
+  </message>
+  <message name="CreateTicketResponse">
+    <part name="parameters" element="tns:CreateTicketResponse"/>
+  </message>
+
+  <message name="GetTicketByIdRequest">
+    <part name="parameters" element="tns:GetTicketByIdRequest"/>
+  </message>
+  <message name="GetTicketByIdResponse">
+    <part name="parameters" element="tns:GetTicketByIdResponse"/>
+  </message>
+
+  <message name="UpdateTicketStatusRequest">
+    <part name="parameters" element="tns:UpdateTicketStatusRequest"/>
+  </message>
+  <message name="UpdateTicketStatusResponse">
+    <part name="parameters" element="tns:UpdateTicketStatusResponse"/>
+  </message>
+
+  <message name="GetAllTicketsRequest">
+    <part name="parameters" element="tns:GetAllTicketsRequest"/>
+  </message>
+  <message name="GetAllTicketsResponse">
+    <part name="parameters" element="tns:GetAllTicketsResponse"/>
+  </message>
+
+  <!-- Port Type -->
+  <portType name="TicketPort">
+    <operation name="CreateTicket">
+      <input message="tns:CreateTicketRequest"/>
+      <output message="tns:CreateTicketResponse"/>
+    </operation>
+    <operation name="GetTicketById">
+      <input message="tns:GetTicketByIdRequest"/>
+      <output message="tns:GetTicketByIdResponse"/>
+    </operation>
+    <operation name="UpdateTicketStatus">
+      <input message="tns:UpdateTicketStatusRequest"/>
+      <output message="tns:UpdateTicketStatusResponse"/>
+    </operation>
+    <operation name="GetAllTickets">
+      <input message="tns:GetAllTicketsRequest"/>
+      <output message="tns:GetAllTicketsResponse"/>
+    </operation>
+  </portType>
+
+  <!-- Binding -->
+  <binding name="TicketBinding" type="tns:TicketPort">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <operation name="CreateTicket">
+      <soap:operation soapAction="http://localhost:5000/tickets#CreateTicket"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="GetTicketById">
+      <soap:operation soapAction="http://localhost:5000/tickets#GetTicketById"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="UpdateTicketStatus">
+      <soap:operation soapAction="http://localhost:5000/tickets#UpdateTicketStatus"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="GetAllTickets">
+      <soap:operation soapAction="http://localhost:5000/tickets#GetAllTickets"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+  </binding>
+
+  <!-- Service -->
+  <service name="TicketService">
+    <port name="TicketPort" binding="tns:TicketBinding">
+      <soap:address location="http://localhost:5000/tickets"/>
+    </port>
+  </service>
+</definitions>
